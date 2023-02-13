@@ -6,7 +6,7 @@ exports.createUser = [
     body('first-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('last-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('email').trim().notEmpty().withMessage('Input must not be empty').isEmail().withMessage('Invalid email').normalizeEmail().bail().custom( async email => {
-        if (await User.findOne({'email': email}).exec() !== null) return Promise.reject('Email is already in use');
+        if (await User.findOne({'email': email}).exec() !== null) throw new Error("Email is already in use");
     }),
     body('password').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('type').trim().notEmpty().withMessage('Input must not be empty').toUpperCase().isIn(['ADMIN', 'CUSTOMER', 'PROVIDER']).withMessage('Invalid type'),
