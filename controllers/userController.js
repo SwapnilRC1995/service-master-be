@@ -22,3 +22,8 @@ exports.createUser = [
     return res.json(await user.save())
     }
 ];
+
+
+exports.getUsers = (req, res) => {
+    res.send('get all users');
+}

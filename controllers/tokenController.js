@@ -14,15 +14,3 @@ exports.getToken = [
     return res.json(await jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1y' }));
     }
 ];
-
-
-exports.verifyToken = async (req, res, next) => {
-    if (req.headers['authorization']) {
-        const decoded = await jwt.verify(req.headers['authorization'].split(' ')[1], process.env.TOKEN_SECRET);
-        if (!decoded.hasOwnProperty('_id')) return res.send('Invalid token')
-        let user = await User.findOne({_id: decoded['_id']}).exec();
-        if (user === null) return res.send('Invalid token');
-        res.locals.user = user;
-    }
-    return next();
-};
