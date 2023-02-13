@@ -6,5 +6,5 @@ const UserSchema = new Schema({
     email: {type: String},
     password: {type: String} ,
     type: {type: String}
-})
+});
 module.exports = UserSchema
