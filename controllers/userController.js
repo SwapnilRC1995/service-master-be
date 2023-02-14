@@ -28,9 +28,7 @@ exports.getUsers = async (req, res) => {
 }
 
 exports.getUser = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json(errors);
@@ -39,9 +37,7 @@ exports.getUser = [
 ]
 
 exports.updateUser = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     body('first-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('last-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('email').trim().notEmpty().withMessage('Input must not be empty').isEmail().withMessage('Invalid email').normalizeEmail().bail().custom( async (email, {req}) => {
@@ -68,9 +64,7 @@ exports.updateUser = [
 ]
 
 exports.deleteUser = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);

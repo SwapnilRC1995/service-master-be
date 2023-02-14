@@ -9,9 +9,7 @@ exports.getServices = async (req, res) => {
 
 // get service by id
 exports.getService = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json(errors);
@@ -44,13 +42,11 @@ exports.createService = [
 
 // update a service by id
 exports.updateService = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     body('name').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('description').trim().escape().notEmpty().withMessage('Description must not be empty'),
-    body('providers').optional().isArray({ min: 1 }).withMessage('Providers must be a non-empty array'),
-    body('providers.*').optional().isMongoId().withMessage('Invalid provider id'),
+    body('providers').optional({checkFalsy: true}).isArray().withMessage('Providers must be a non-empty array'),
+    body('providers.*').optional({checkFalsy: true}).isMongoId().withMessage('Invalid provider id'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);
@@ -68,9 +64,7 @@ exports.updateService = [
 
 // delete a service by id
 exports.deleteService = [
-    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
-        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
-    }),
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);
