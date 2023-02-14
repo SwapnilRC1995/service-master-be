@@ -2,6 +2,12 @@ const { body, validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 const Service = require('../models/service');
 
+// get all services
+exports.getServices = async (req, res) => {
+    return res.json(await Service.find({}));
+}
+
+// create a new service
 exports.createService = [
     body('name').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('description').trim().escape().notEmpty().withMessage('Description must not be empty'),
