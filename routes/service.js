@@ -8,6 +8,10 @@ router.get('/', checkIfAdminOrCurrenUserSignedIn, serviceController.getServices)
 
 router.get('/:_id', checkIfAdminOrCurrenUserSignedIn, serviceController.getService);
 
+router.put('/:_id', checkIfAdminSignedIn, serviceController.updateService);
+
+router.delete('/:_id', checkIfAdminSignedIn, serviceController.deleteService);
+
 router.post('/', checkIfAdminSignedIn, serviceController.createService);
 
 
