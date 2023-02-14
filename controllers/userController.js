@@ -1,12 +1,11 @@
 const {body, validationResult, param} = require('express-validator');
-const User = require('../models/user')
-const mongoose = require("mongoose");
+const User = require('../models/user');
 
 exports.createUser = [
     body('first-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('last-name').trim().escape().notEmpty().withMessage('Input must not be empty'),
     body('email').trim().notEmpty().withMessage('Input must not be empty').isEmail().withMessage('Invalid email').normalizeEmail().bail().custom( async email => {
-        if (await User.findOne({email: email}).exec() !== null) throw new Error("Email is already in use");
+        if (await User.findOne({email: email}).exec() !== null) throw new Error('Email is already in use');
     }),
     body('password').trim().notEmpty().withMessage('Input must not be empty'),
     body('type').trim().notEmpty().withMessage('Input must not be empty').toUpperCase().isIn(['ADMIN', 'CUSTOMER', 'PROVIDER']).withMessage('Invalid type'),
@@ -44,7 +43,7 @@ exports.updateUser = [
         let user = await User.findOne({email: email}).exec()
         if (user !== null) {
             if (user._id.toString() !== req.params['_id']) {
-                throw new Error("Email is already in use");
+                throw new Error('Email is already in use');
             }
         }
     }),

@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
@@ -38,6 +38,6 @@ app.use('/booking', bookingRouter);
 app.use('/service', serviceRouter);
 app.use('/token', tokenRouter);
 
-app.use((req, res) => res.status(404).send("Route not found"));
+app.use((req, res) => res.status(404).send('Route not found'));
 
 module.exports = app;

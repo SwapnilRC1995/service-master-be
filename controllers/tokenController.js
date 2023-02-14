@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const {body, validationResult} = require("express-validator");
-const User = require("../models/user");
+const {body, validationResult} = require('express-validator');
+const User = require('../models/user');
 
 exports.getToken = [
     body('email').trim().notEmpty().withMessage('Input must not be empty').isEmail().withMessage('Invalid email').normalizeEmail(),

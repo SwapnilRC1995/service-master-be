@@ -1,5 +1,4 @@
 const { body, validationResult, param } = require('express-validator');
-const mongoose = require('mongoose');
 const Service = require('../models/service');
 
 // get all services

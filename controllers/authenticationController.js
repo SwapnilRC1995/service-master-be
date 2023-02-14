@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user')
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 exports.verifyToken = async (req, res, next) => {
     if (req.headers['authorization']) {
         const decoded = await jwt.verify(req.headers['authorization'].split(' ')[1], process.env.TOKEN_SECRET);
         if (!decoded.hasOwnProperty('_id')) return res.send('Invalid token')
-        if (!mongoose.Types.ObjectId.isValid(decoded['_id'])) throw new Error("_id is not valid");
+        if (!mongoose.Types.ObjectId.isValid(decoded['_id'])) throw new Error('_id is not valid');
         res.locals._id = decoded['_id'];
     }
     return next();

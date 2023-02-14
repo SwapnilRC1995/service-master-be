@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
-const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn} = require("../controllers/authenticationController");
+const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn} = require('../controllers/authenticationController');
 
 router.get('/', checkIfAdminSignedIn, userController.getUsers);
 
