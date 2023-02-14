@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult, param } = require('express-validator');
 const mongoose = require('mongoose');
 const Service = require('../models/service');
 
@@ -6,6 +6,18 @@ const Service = require('../models/service');
 exports.getServices = async (req, res) => {
     return res.json(await Service.find({}));
 }
+
+// get service by id
+exports.getService = [
+    param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').custom(async _id => {
+        if (!mongoose.Types.ObjectId.isValid(_id)) throw new Error("_id is not valid");
+    }),
+    async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json(errors);
+    return res.json(await Service.findById(req.params['_id']).exec());
+    }
+]
 
 // create a new service
 exports.createService = [
