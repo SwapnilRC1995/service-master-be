@@ -1,6 +1,5 @@
-const Booking = require('../models/Booking');
+const Booking = require('../models/booking');
 
 exports.getBookings = async (req, res) => {
-    // return res.json(await Booking.find({}));
-    return res.json('TODO');
+    return res.json(await Booking.find({}));
 }
