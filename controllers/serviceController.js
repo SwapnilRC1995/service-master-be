@@ -10,9 +10,9 @@ exports.getServices = async (req, res) => {
 exports.getService = [
     param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json(errors);
-    return res.json(await Service.findById(req.params['_id']).exec());
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) return res.status(400).json(errors);
+        return res.json(await Service.findById(req.params['_id']).exec());
     }
 ]
 
@@ -44,17 +44,17 @@ exports.updateService = [
     param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     body('name').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('description').trim().escape().notEmpty().withMessage('Description must not be empty'),
-    body('providers').optional({checkFalsy: true}).isArray().withMessage('Providers must be a non-empty array'),
-    body('providers.*').optional({checkFalsy: true}).isMongoId().withMessage('Invalid provider id'),
+    body('providers').optional({ checkFalsy: true }).isArray().withMessage('Providers must be a non-empty array'),
+    body('providers.*').optional({ checkFalsy: true }).isMongoId().withMessage('Invalid provider id'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);
         const updateParams = {
             name: req.body['name'],
             description: req.body['description'],
-          };
+        };
         if (req.body['providers']) {
-        updateParams.providers = req.body['providers'];
+            updateParams.providers = req.body['providers'];
         }
         return res.json(await Service.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
     }
