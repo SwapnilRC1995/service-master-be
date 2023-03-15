@@ -9,7 +9,7 @@ exports.getToken = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json(errors);
     let user = await User.findOne({email: req.body['email']}).exec();
-    if (user === null) return res.send('Email does not associate with any user');
+    if (user === null) return res.status(400).send('Email does not associate with any user');
     if (req.body['password'] !== user.password) return res.send('Incorrect credential');
     return res.json(await jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1y' }));
     }
