@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
+const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn} = require('../controllers/authorizationController');
 
 router.get('/', checkIfAdminOrCurrenUserSignedIn, bookingController.getBookings);
 
@@ -8,7 +9,7 @@ router.get('/:_id', checkIfAdminOrCurrenUserSignedIn, bookingController.getBooki
 
 router.get('/customer/:_id', checkIfAdminOrCurrenUserSignedIn, bookingController.getBookingByCustomerId);
 
-router.put('/:_id', checkIfAdminSignedIn, bookinController.updateService);
+router.put('/:_id', checkIfAdminSignedIn, bookingController.updateBooking);
 
 router.delete('/:_id', checkIfAdminSignedIn, bookingController.deleteBooking);
 
