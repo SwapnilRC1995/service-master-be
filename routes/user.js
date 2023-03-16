@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController')
-const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn} = require('../controllers/authorizationController');
+const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn, checkCurrenUserSignedIn} = require('../controllers/authorizationController');
 
 router.get('/', checkIfAdminSignedIn, userController.getUsers);
+
+router.get('/current', checkCurrenUserSignedIn, userController.getCurrentUser)
 
 router.get('/:_id', checkIfAdminOrCurrenUserSignedIn, userController.getUser);
 

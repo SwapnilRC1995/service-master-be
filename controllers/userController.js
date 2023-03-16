@@ -35,6 +35,14 @@ exports.getUser = [
     }
 ]
 
+exports.getCurrentUser = [
+    async (req, res) => {
+    const user = await User.findById(res.locals._id).exec();
+    if (user === null) return res.status(400).send('User not found');
+    return res.json(user);
+    }
+]
+
 exports.updateUser = [
     param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     body('first-name').trim().escape().notEmpty().withMessage('Input must not be empty'),

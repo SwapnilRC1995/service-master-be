@@ -9,6 +9,7 @@ exports.verifyToken = async (req, res, next) => {
             if (!decoded.hasOwnProperty('_id')) return res.status(401).send('Invalid token')
             if (!mongoose.Types.ObjectId.isValid(decoded['_id'])) throw new Error('_id is not valid');
             res.locals._id = decoded['_id'];
+            return next();
         } catch (e) {
             return res.status(401).json(e);
         }
@@ -19,10 +20,10 @@ exports.verifyToken = async (req, res, next) => {
 
 
 exports.checkIfAdminSignedIn = async (req, res, next) => {
-    if (!res.locals._id) return res.status(401).send('Unauthorized');
+    if (!res.locals._id) return res.status(401).send('Unauthorized1');
     const user = await User.findById(res.locals._id).exec();
-    if (user === null) return res.status(401).send('Unauthorized');
-    if (user.type !== 'ADMIN') return res.status(401).send('Unauthorized');
+    if (user === null) return res.status(401).send('Unauthorized2');
+    if (user.type !== 'ADMIN') return res.status(401).send('Unauthorized3');
     return next();
 };
 
@@ -33,5 +34,10 @@ exports.checkIfAdminOrCurrenUserSignedIn = async (req, res, next) => {
     if (user.type !== 'ADMIN') {
         if (req.params['_id'] !== res.locals._id) return res.status(401).send('Unauthorized3');
     }
+    return next();
+};
+
+exports.checkCurrenUserSignedIn = async (req, res, next) => {
+    if (!res.locals._id) return res.status(401).send('Unauthorized');
     return next();
 };

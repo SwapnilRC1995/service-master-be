@@ -11,6 +11,6 @@ exports.getToken = [
     let user = await User.findOne({email: req.body['email']}).exec();
     if (user === null) return res.status(400).send('Email does not associate with any user');
     if (req.body['password'] !== user.password) return res.status(400).send('Incorrect credential');
-    return res.json(await jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1y' }));
+    return res.json({token: await jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: '1y' }), user: user});
     }
 ];
