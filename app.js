@@ -13,7 +13,7 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const bookingRouter = require('./routes/booking');
 const serviceRouter = require('./routes/service');
-const tokenRouter = require('./routes/token');
+const authenticationRouter = require('./routes/authentication');
 
 const app = express();
 
@@ -36,7 +36,7 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/booking', bookingRouter);
 app.use('/service', serviceRouter);
-app.use('/token', tokenRouter);
+app.use('/authentication', authenticationRouter);
 
 app.use((req, res) => res.status(404).send('Route not found'));
 
