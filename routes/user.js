@@ -7,6 +7,8 @@ router.get('/', checkIfAdminSignedIn, userController.getUsers);
 
 router.get('/current', checkCurrenUserSignedIn, userController.getCurrentUser)
 
+router.get('/name/:_id', checkCurrenUserSignedIn, userController.getName)
+
 router.get('/:_id', checkIfAdminOrCurrenUserSignedIn, userController.getUser);
 
 router.put('/:_id', checkIfAdminOrCurrenUserSignedIn, userController.updateUser);
