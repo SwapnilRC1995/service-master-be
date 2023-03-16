@@ -10,10 +10,11 @@ exports.verifyToken = async (req, res, next) => {
             if (!mongoose.Types.ObjectId.isValid(decoded['_id'])) throw new Error('_id is not valid');
             res.locals._id = decoded['_id'];
         } catch (e) {
-            res.json(e)
+            return res.status(401).json(e);
         }
+    } else {
+        return next();
     }
-    return next();
 };
 
 
