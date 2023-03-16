@@ -14,11 +14,12 @@ exports.getBooking = [
     }
 ]
 
-exports.getBookingByCustomerId = [
+exports.getBookingsByCustomerId = [
     async (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) return res.status(400).json(errors);
-        return res.json(await Booking.find({customer: res.locals._id}));
+    const bookings = await Booking.find({customer: res.locals._id});
+    let updatedBookings = [];
+    // TODO: query other tables to find more info
+    return res.json(updatedBookings);
     }
 ];
 

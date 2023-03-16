@@ -1,9 +1,23 @@
 const { body, validationResult, param } = require('express-validator');
 const Service = require('../models/service');
+const User = require("../models/user");
+const {log} = require("debug");
 
 // get all services
 exports.getServices = async (req, res) => {
-    return res.json(await Service.find({}));
+    const services = await Service.find({})
+    let updatedServices = []
+    for (const service of services) {
+        let providers = []
+        for (const provider of service.providers) {
+            let user = await User.findById(provider).select({"first_name": 1, "last_name": 1}).exec();
+            if (user === null) return res.status(400).send('User not found');
+            providers.push({"_id": provider._id, "name": user.first_name + ' ' + user.last_name});
+        }
+        updatedServices.push({service: service, providers: providers})
+    }
+    console.log(updatedServices[0])
+    return res.json(updatedServices);
 }
 
 // get service by id

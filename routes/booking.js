@@ -3,7 +3,7 @@ const router = express.Router();
 const bookingController = require('../controllers/bookingController');
 const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn, checkCurrenUserSignedIn} = require('../controllers/authorizationController');
 
-router.get('/customer', checkCurrenUserSignedIn, bookingController.getBookingByCustomerId);
+router.get('/customer', checkCurrenUserSignedIn, bookingController.getBookingsByCustomerId);
 
 router.get('/', checkIfAdminOrCurrenUserSignedIn, bookingController.getBookings);
 
