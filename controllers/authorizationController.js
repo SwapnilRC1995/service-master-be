@@ -18,7 +18,6 @@ exports.verifyToken = async (req, res, next) => {
     }
 };
 
-
 exports.checkIfAdminSignedIn = async (req, res, next) => {
     if (!res.locals._id) return res.status(401).send('Unauthorized1');
     const user = await User.findById(res.locals._id).exec();

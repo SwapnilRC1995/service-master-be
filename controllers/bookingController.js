@@ -29,6 +29,19 @@ exports.getBookingsByCustomerId = [
     }
 ];
 
+exports.getBookingsByProviderId = [
+    async (req, res) => {
+        const bookings = await Booking.find({provider: res.locals._id});
+        let updatedBookings = [];
+        for (const booking of bookings) {
+            const provider = await User.findById(booking.provider).select({"first_name":1, "last_name":1}).exec();
+            const service = await Service.findById(booking.service).select({"name":1, "description":1}).exec();
+            updatedBookings.push({booking: booking, provider: provider.first_name + ' ' + provider.last_name, service: service});
+        }
+        return res.json(updatedBookings);
+    }
+];
+
 exports.createBooking = [
     body('urgency').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('booking_description').trim().escape().notEmpty().withMessage('Description must not be empty'),
