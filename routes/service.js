@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const serviceController = require('../controllers/serviceController')
-const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn, checkCurrenUserSignedIn} = require('../controllers/authorizationController');
+const {checkIfAdminSignedIn, checkIfAdminOrUserSignedIn, checkUserSignedIn} = require('../controllers/authorizationController');
 
 
-router.get('/', checkCurrenUserSignedIn, serviceController.getServices);
+router.get('/', checkUserSignedIn, serviceController.getServices);
 
-router.get('/:_id', checkCurrenUserSignedIn, serviceController.getService);
+router.get('/:_id', checkUserSignedIn, serviceController.getService);
 
 router.put('/:_id', checkIfAdminSignedIn, serviceController.updateService);
 

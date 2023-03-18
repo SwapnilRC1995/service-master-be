@@ -1,5 +1,7 @@
 const { body, validationResult, param } = require('express-validator');
 const Booking = require('../models/booking');
+const User = require("../models/user");
+const Service = require("../models/service");
 
 exports.getBookings = async (req, res) => {
     return res.json(await Booking.find({}));
@@ -16,10 +18,14 @@ exports.getBooking = [
 
 exports.getBookingsByCustomerId = [
     async (req, res) => {
-    const bookings = await Booking.find({customer: res.locals._id});
-    let updatedBookings = [];
-    // TODO: query other tables to find more info
-    return res.json(updatedBookings);
+        const bookings = await Booking.find({customer: res.locals._id});
+        let updatedBookings = [];
+        for (const booking of bookings) {
+            const provider = await User.findById(booking.provider).select({"first_name":1, "last_name":1}).exec();
+            const service = await Service.findById(booking.service).select({"name":1, "description":1}).exec();
+            updatedBookings.push({booking: booking, provider: provider.first_name + ' ' + provider.last_name, service: service});
+        }
+        return res.json(updatedBookings);
     }
 ];
 
@@ -69,6 +75,21 @@ exports.updateBooking = [
             provider: req.body['provider'],
             customer: res.locals._id,
             service: req.body['service']
+        };
+        return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
+    },
+];
+
+exports.updateBookingDate = [
+    param('_id').trim().escape().notEmpty().withMessage('ID must not be empty'),
+    body('booking_date').trim().escape().notEmpty().withMessage('Date must not be empty'),
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json(errors);
+        }
+        const updateParams = {
+            booking_date: req.body['booking_date']
         };
         return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
     },

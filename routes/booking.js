@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
-const {checkIfAdminSignedIn, checkIfAdminOrCurrenUserSignedIn, checkCurrenUserSignedIn} = require('../controllers/authorizationController');
+const {checkIfAdminSignedIn, checkIfAdminOrUserSignedIn, checkUserSignedIn} = require('../controllers/authorizationController');
 
-router.get('/customer', checkCurrenUserSignedIn, bookingController.getBookingsByCustomerId);
+router.get('/customer/', checkUserSignedIn, bookingController.getBookingsByCustomerId);
 
-router.get('/', checkIfAdminOrCurrenUserSignedIn, bookingController.getBookings);
+router.get('/', checkIfAdminOrUserSignedIn, bookingController.getBookings);
 
-router.get('/:_id', checkIfAdminOrCurrenUserSignedIn, bookingController.getBooking);
+router.get('/:_id', checkIfAdminOrUserSignedIn, bookingController.getBooking);
 
 router.put('/:_id', checkIfAdminSignedIn, bookingController.updateBooking);
 
-router.delete('/:_id', checkIfAdminSignedIn, bookingController.deleteBooking);
+router.put('/date/:_id', checkUserSignedIn, bookingController.updateBookingDate);
 
-router.post('/', checkCurrenUserSignedIn, bookingController.createBooking);
+router.delete('/:_id', checkUserSignedIn, bookingController.deleteBooking);
+
+router.post('/', checkUserSignedIn, bookingController.createBooking);
 
 module.exports = router;

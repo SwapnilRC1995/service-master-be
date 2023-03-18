@@ -27,7 +27,7 @@ exports.checkIfAdminSignedIn = async (req, res, next) => {
     return next();
 };
 
-exports.checkIfAdminOrCurrenUserSignedIn = async (req, res, next) => {
+exports.checkIfAdminOrUserSignedIn = async (req, res, next) => {
     if (!res.locals._id) return res.status(401).send('Unauthorized1');
     const user = await User.findById(res.locals._id).exec();
     if (user === null) return res.status(401).send('Unauthorized2');
@@ -37,7 +37,7 @@ exports.checkIfAdminOrCurrenUserSignedIn = async (req, res, next) => {
     return next();
 };
 
-exports.checkCurrenUserSignedIn = async (req, res, next) => {
+exports.checkUserSignedIn = async (req, res, next) => {
     if (!res.locals._id) return res.status(401).send('Unauthorized');
     return next();
 };
