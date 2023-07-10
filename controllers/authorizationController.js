@@ -19,19 +19,19 @@ exports.verifyToken = async (req, res, next) => {
 };
 
 exports.checkIfAdminSignedIn = async (req, res, next) => {
-    if (!res.locals._id) return res.status(401).send('Unauthorized1');
+    if (!res.locals._id) return res.status(401).send('Unauthorized');
     const user = await User.findById(res.locals._id).exec();
-    if (user === null) return res.status(401).send('Unauthorized2');
-    if (user.type !== 'ADMIN') return res.status(401).send('Unauthorized3');
+    if (user === null) return res.status(401).send('Unauthorized');
+    if (user.type !== 'ADMIN') return res.status(401).send('Unauthorized');
     return next();
 };
 
 exports.checkIfAdminOrUserSignedIn = async (req, res, next) => {
-    if (!res.locals._id) return res.status(401).send('Unauthorized1');
+    if (!res.locals._id) return res.status(401).send('Unauthorized');
     const user = await User.findById(res.locals._id).exec();
-    if (user === null) return res.status(401).send('Unauthorized2');
+    if (user === null) return res.status(401).send('Unauthorized');
     if (user.type !== 'ADMIN') {
-        if (req.params['_id'] !== res.locals._id) return res.status(401).send('Unauthorized3');
+        if (req.params['_id'] !== res.locals._id) return res.status(401).send('Unauthorized');
     }
     return next();
 };
