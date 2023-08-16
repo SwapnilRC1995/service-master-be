@@ -1,4 +1,4 @@
-const { body, validationResult, param } = require('express-validator');
+const {body, validationResult, param} = require('express-validator');
 const Booking = require('../models/booking');
 const User = require("../models/user");
 const Service = require("../models/service");
@@ -21,9 +21,13 @@ exports.getBookingsByCustomerId = [
         const bookings = await Booking.find({customer: res.locals._id});
         let updatedBookings = [];
         for (const booking of bookings) {
-            const provider = await User.findById(booking.provider).select({"first_name":1, "last_name":1}).exec();
-            const service = await Service.findById(booking.service).select({"name":1, "description":1}).exec();
-            updatedBookings.push({booking: booking, provider: provider.first_name + ' ' + provider.last_name, service: service});
+            const provider = await User.findById(booking.provider).select({"first_name": 1, "last_name": 1}).exec();
+            const service = await Service.findById(booking.service).select({"name": 1, "description": 1}).exec();
+            updatedBookings.push({
+                booking: booking,
+                provider: provider.first_name + ' ' + provider.last_name,
+                service: service
+            });
         }
         return res.json(updatedBookings);
     }
@@ -34,9 +38,13 @@ exports.getBookingsByProviderId = [
         const bookings = await Booking.find({provider: res.locals._id});
         let updatedBookings = [];
         for (const booking of bookings) {
-            const customer = await User.findById(booking.customer).select({"first_name":1, "last_name":1}).exec();
-            const service = await Service.findById(booking.service).select({"name":1, "description":1}).exec();
-            updatedBookings.push({booking: booking, provider: customer.first_name + ' ' + customer.last_name, service: service});
+            const customer = await User.findById(booking.customer).select({"first_name": 1, "last_name": 1}).exec();
+            const service = await Service.findById(booking.service).select({"name": 1, "description": 1}).exec();
+            updatedBookings.push({
+                booking: booking,
+                provider: customer.first_name + ' ' + customer.last_name,
+                service: service
+            });
         }
         return res.json(updatedBookings);
     }
@@ -89,7 +97,7 @@ exports.updateBooking = [
             customer: res.locals._id,
             service: req.body['service']
         };
-        return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
+        return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, {returnDocument: 'after'}));
     },
 ];
 
@@ -104,7 +112,7 @@ exports.updateBookingDate = [
         const updateParams = {
             booking_date: req.body['booking_date']
         };
-        return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
+        return res.json(await Booking.findByIdAndUpdate(req.params._id, updateParams, {returnDocument: 'after'}));
     },
 ];
 
