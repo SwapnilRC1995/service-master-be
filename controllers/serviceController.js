@@ -1,4 +1,4 @@
-const { body, validationResult, param } = require('express-validator');
+const {body, validationResult, param} = require('express-validator');
 const Service = require('../models/service');
 const User = require("../models/user");
 
@@ -34,12 +34,12 @@ exports.getAvailableServices = async (req, res) => {
 
 exports.getServicesOfProvider = async (req, res) => {
     const services = await Service.find({providers: {$nin: [res.locals._id]}})
-    return res.json(services.map(service =>({service:service})));
+    return res.json(services.map(service => ({service: service})));
 }
 
 exports.getRegisteredServicesOfProvider = async (req, res) => {
     const services = await Service.find({providers: [res.locals._id]})
-    return res.json(services.map(service =>({service:service})));
+    return res.json(services.map(service => ({service: service})));
 }
 
 // get service by id
@@ -56,7 +56,7 @@ exports.getService = [
 exports.createService = [
     body('name').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('description').trim().escape().notEmpty().withMessage('Description must not be empty'),
-    body('providers').optional().isArray({ min: 1 }).withMessage('Providers must be a non-empty array'),
+    body('providers').optional().isArray({min: 1}).withMessage('Providers must be a non-empty array'),
     body('providers.*').optional().isMongoId().withMessage('Invalid provider id'),
     async (req, res) => {
         const errors = validationResult(req);
@@ -80,8 +80,8 @@ exports.updateService = [
     param('_id').trim().escape().notEmpty().withMessage('_id must not be empty').isMongoId().withMessage('_id is not valid'),
     body('name').trim().escape().notEmpty().withMessage('Name must not be empty'),
     body('description').trim().escape().notEmpty().withMessage('Description must not be empty'),
-    body('providers').optional({ checkFalsy: true }).isArray().withMessage('Providers must be a non-empty array'),
-    body('providers.*').optional({ checkFalsy: true }).isMongoId().withMessage('Invalid provider id'),
+    body('providers').optional({checkFalsy: true}).isArray().withMessage('Providers must be a non-empty array'),
+    body('providers.*').optional({checkFalsy: true}).isMongoId().withMessage('Invalid provider id'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);
@@ -92,7 +92,7 @@ exports.updateService = [
         if (req.body['providers']) {
             updateParams.providers = req.body['providers'];
         }
-        return res.json(await Service.findByIdAndUpdate(req.params._id, updateParams, { returnDocument: 'after' }));
+        return res.json(await Service.findByIdAndUpdate(req.params._id, updateParams, {returnDocument: 'after'}));
     }
 ]
 
@@ -103,9 +103,9 @@ exports.addProvider = [
         if (!errors.isEmpty()) return res.status(400).json(errors);
         const service = await Service.findById(req.params['_id']).exec();
         if (service.providers.find(provider => provider.toString() === res.locals._id)) {
-                return res.status(400).json('Already registered');
+            return res.status(400).json('Already registered');
         }
-        return res.json(await Service.findByIdAndUpdate(req.params._id, {$push: {providers: res.locals._id}}, { returnDocument: 'after' }));
+        return res.json(await Service.findByIdAndUpdate(req.params._id, {$push: {providers: res.locals._id}}, {returnDocument: 'after'}));
     }
 ]
 
@@ -114,7 +114,7 @@ exports.deleteProvider = [
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) return res.status(400).json(errors);
-        return res.json(await Service.findByIdAndUpdate(req.params._id, {$pull: {providers: res.locals._id}}, { returnDocument: 'after' }));
+        return res.json(await Service.findByIdAndUpdate(req.params._id, {$pull: {providers: res.locals._id}}, {returnDocument: 'after'}));
     }
 ]
 
